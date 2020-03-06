@@ -10,7 +10,7 @@ function Header() {
   const classes = useStyles();
 
   return (
-    <AppBar color="secondary" position="fixed">
+    <AppBar color="primary" position="fixed">
       <Toolbar>
         <GraphicEq />
         <Typography className={classes.title} variant="h6" component="h1">
