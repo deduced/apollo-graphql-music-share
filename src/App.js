@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import AddSong from "./components/AddSong";
 import SongList from "./components/SongList";
 import SongPlayer from "./components/SongPlayer";
-import { Grid, useMediaQuery } from "@material-ui/core";
+import { Grid, useMediaQuery, Hidden } from "@material-ui/core";
 
 function App() {
   const isGreaterThanSmallBreakpoint = useMediaQuery(theme =>
@@ -15,7 +15,9 @@ function App() {
 
   return (
     <>
-      {isGreaterThanSmallBreakpoint && <Header />}
+      <Hidden only="xs">
+        <Header />
+      </Hidden>
       <Grid container spacing={3}>
         <Grid
           style={{ paddingTop: isGreaterThanSmallBreakpoint ? 80 : 10 }}
