@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
+import { Typography, useMediaQuery } from "@material-ui/core";
 
 import QueuedSong from "./QueuedSong";
 
@@ -10,15 +10,21 @@ const song = {
 };
 
 function QueuedSongList() {
+  const isGreaterThanMediumBreakpoint = useMediaQuery(theme =>
+    theme.breakpoints.up("md")
+  );
+
   return (
-    <div style={{ margin: "10px 0" }}>
-      <Typography color="textSecondary" variant="button">
-        Queue (5)
-      </Typography>
-      {Array.from({ length: 5 }, () => song).map((song, idx) => (
-        <QueuedSong key={idx} song={song} />
-      ))}
-    </div>
+    isGreaterThanMediumBreakpoint && (
+      <div style={{ margin: "10px 0" }}>
+        <Typography color="textSecondary" variant="button">
+          Queue (5)
+        </Typography>
+        {Array.from({ length: 5 }, () => song).map((song, idx) => (
+          <QueuedSong key={idx} song={song} />
+        ))}
+      </div>
+    )
   );
 }
 

@@ -3,9 +3,14 @@ import Header from "./components/Header";
 import AddSong from "./components/AddSong";
 import SongList from "./components/SongList";
 import SongPlayer from "./components/SongPlayer";
-import { Grid } from "@material-ui/core";
+import { Grid, useMediaQuery } from "@material-ui/core";
 
 function App() {
+  const isGreaterThanMediumBreakpoint = useMediaQuery(theme =>
+    theme.breakpoints.up("md")
+  );
+  console.log(isGreaterThanMediumBreakpoint);
+
   return (
     <>
       <Header />
@@ -15,7 +20,16 @@ function App() {
           <SongList />
         </Grid>
         <Grid
-          style={{ position: "fixed", width: "100%", right: 0, top: 70 }}
+          style={
+            isGreaterThanMediumBreakpoint
+              ? { position: "fixed", width: "100%", right: 0, top: 70 }
+              : {
+                  bottom: 0,
+                  left: 0,
+                  position: "fixed",
+                  width: "100%"
+                }
+          }
           item
           xs={12}
           md={5}
