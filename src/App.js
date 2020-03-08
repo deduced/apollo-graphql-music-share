@@ -9,7 +9,6 @@ function App() {
   const isGreaterThanMediumBreakpoint = useMediaQuery(theme =>
     theme.breakpoints.up("md")
   );
-  console.log(isGreaterThanMediumBreakpoint);
 
   return (
     <>
