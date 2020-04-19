@@ -12,25 +12,3 @@ export const GET_SONGS = gql`
     }
   }
 `;
-
-// mutation addSong {
-//     insert_songs(
-//       objects: {
-//         title: "Ibiza Summer Mix"
-//         artist: "Ibiza"
-//         thumbnail: "http://i3.ytimg.com/vi/0IA1vCyffos/hqdefault.jpg"
-//         duration: 250
-//         url: "https://www.youtube.com/watch?v=0IA1vCyffos"
-//       }
-//     ) {
-//       returning {
-//         id
-//         duration
-//         created_at
-//         artist
-//         thumbnail
-//         title
-//         url
-//       }
-//     }
-//   }
