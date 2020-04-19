@@ -53,6 +53,14 @@ function AddSong() {
     setIsPlayable(isPlayable);
   }, [url]);
 
+  function handleSongChange(event) {
+    const { name, value } = event.target;
+    setSong(prevSong => ({
+      ...prevSong,
+      [name]: value
+    }));
+  }
+
   function handleCloseDialog() {
     setDialog(false);
   }
@@ -113,6 +121,7 @@ function AddSong() {
           />
           <TextField
             value={title}
+            onChange={handleSongChange}
             margin="dense"
             name="title"
             label="Title"
@@ -120,6 +129,7 @@ function AddSong() {
           />
           <TextField
             value={artist}
+            onChange={handleSongChange}
             margin="dense"
             name="artist"
             label="Artist"
@@ -127,6 +137,7 @@ function AddSong() {
           />
           <TextField
             value={thumbnail}
+            onChange={handleSongChange}
             margin="dense"
             name="thumbnail"
             label="Thumbnail"
