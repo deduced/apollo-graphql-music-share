@@ -13,6 +13,8 @@ import { Link, AddBoxOutlined } from "@material-ui/icons";
 import ReactPlayer from "react-player";
 import SoundcloudPlayer from "react-player/lib/players/SoundCloud";
 import YoutubePlayer from "react-player/lib/players/YouTube";
+import { useMutation } from "@apollo/react-hooks";
+import { ADD_SONG } from "../graphql/mutations";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -33,18 +35,20 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const DEFAULT_SONG = {
+  duration: 0,
+  title: "",
+  artist: "",
+  thumbnail: ""
+};
+
 function AddSong() {
+  const classes = useStyles();
+  const [addSong] = useMutation(ADD_SONG);
   const [dialog, setDialog] = useState(false);
   const [url, setUrl] = useState("");
   const [isPlayable, setIsPlayable] = useState(false);
-  const [song, setSong] = useState({
-    duration: 0,
-    title: "",
-    artist: "",
-    thumbnail: ""
-  });
-
-  const classes = useStyles();
+  const [song, setSong] = useState(DEFAULT_SONG);
 
   useEffect(() => {
     const isPlayable =
@@ -63,6 +67,26 @@ function AddSong() {
 
   function handleCloseDialog() {
     setDialog(false);
+  }
+
+  async function handleAddSong() {
+    try {
+      const { artist, title, thumbnail, url, duration } = song;
+      await addSong({
+        variables: {
+          artist: artist.length > 0 ? artist : null,
+          duration: duration > 0 ? duration : null,
+          thumbnail: thumbnail.length > 0 ? thumbnail : null,
+          title: title.length > 0 ? title : null,
+          url: url.length > 0 ? url : null
+        }
+      });
+      handleCloseDialog();
+      setSong(DEFAULT_SONG);
+      setUrl("");
+    } catch (error) {
+      console.error("Error adding song", error);
+    }
   }
 
   async function handleEditSong({ player }) {
@@ -145,7 +169,7 @@ function AddSong() {
           />
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" color="primary">
+          <Button onClick={handleAddSong} variant="outlined" color="primary">
             Add Song
           </Button>
           <Button onClick={handleCloseDialog} color="secondary">
