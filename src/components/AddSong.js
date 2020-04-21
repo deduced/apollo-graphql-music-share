@@ -128,7 +128,8 @@ function AddSong() {
   }
 
   function handleError(field) {
-    return error?.graphQLErrors[0]?.extensions?.path.includes(field);
+    if (error) console.dir(error);
+    return error?.networkError?.extensions?.path.includes(field);
   }
 
   const { thumbnail, title, artist } = song;
