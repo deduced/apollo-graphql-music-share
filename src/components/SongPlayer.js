@@ -36,7 +36,7 @@ function SongPlayer() {
   const classes = useStyles();
 
   return (
-    <div>
+    <>
       <Card variant="outlined" className={classes.container}>
         <div className={classes.details}>
           <CardContent className={classes.content}>
@@ -69,7 +69,7 @@ function SongPlayer() {
         />
       </Card>
       <QueuedSongList />
-    </div>
+    </>
   );
 }
 
