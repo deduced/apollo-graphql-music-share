@@ -3,13 +3,13 @@ import { Typography, useMediaQuery } from "@material-ui/core";
 
 import QueuedSong from "./QueuedSong";
 
-const song = {
-  title: "Ibiza Summer Mix",
-  artist: "Ibiza",
-  thumbnail: "http://i3.ytimg.com/vi/0IA1vCyffos/hqdefault.jpg"
-};
+// const song = {
+//   title: "Ibiza Summer Mix",
+//   artist: "Ibiza",
+//   thumbnail: "http://i3.ytimg.com/vi/0IA1vCyffos/hqdefault.jpg"
+// };
 
-function QueuedSongList() {
+function QueuedSongList({ queue }) {
   const isGreaterThanMediumBreakpoint = useMediaQuery(theme =>
     theme.breakpoints.up("md")
   );
@@ -18,9 +18,9 @@ function QueuedSongList() {
     isGreaterThanMediumBreakpoint && (
       <div style={{ margin: "10px 0" }}>
         <Typography color="textSecondary" variant="button">
-          Queue (5)
+          Queue ({queue.length})
         </Typography>
-        {Array.from({ length: 5 }, () => song).map((song, idx) => (
+        {queue.map((song, idx) => (
           <QueuedSong key={idx} song={song} />
         ))}
       </div>
