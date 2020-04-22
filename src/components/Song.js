@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Card,
   CardMedia,
@@ -8,7 +8,8 @@ import {
   IconButton,
   makeStyles
 } from "@material-ui/core";
-import { PlayArrow, Save } from "@material-ui/icons";
+import { PlayArrow, Save, Pause } from "@material-ui/icons";
+import { SongContext } from "../App";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -32,7 +33,19 @@ const useStyles = makeStyles(theme => ({
 
 function Song({ song }) {
   const classes = useStyles();
+  const { state, dispatch } = useContext(SongContext);
+  const [isCurrentSongPlaying, setCurrentSongPlaying] = useState(false);
   const { artist, thumbnail, title } = song;
+
+  useEffect(() => {
+    const isSongPlaying = state.isPlaying && song.id === state.song.id;
+    setCurrentSongPlaying(isSongPlaying);
+  }, [state.isPlaying, song.id, state.song.id]);
+
+  function handleTogglePlay() {
+    dispatch({ type: "SET_SONG", payload: { song } });
+    dispatch(state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" });
+  }
 
   return (
     <Card className={classes.container}>
@@ -48,8 +61,8 @@ function Song({ song }) {
             </Typography>
           </CardContent>
           <CardActions>
-            <IconButton size="small" color="primary">
-              <PlayArrow />
+            <IconButton onClick={handleTogglePlay} size="small" color="primary">
+              {isCurrentSongPlaying ? <Pause /> : <PlayArrow />}
             </IconButton>
             <IconButton size="small" color="secondary">
               <Save />
