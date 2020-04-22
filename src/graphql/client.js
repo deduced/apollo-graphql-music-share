@@ -66,8 +66,11 @@ const apolloClient = new ApolloClient({
   }
 });
 
+const localQueue = localStorage.getItem("queue");
+const hasQueue = Boolean(localQueue);
+
 const data = {
-  queuedSongs: []
+  queuedSongs: hasQueue ? JSON.parse(localQueue) : []
 };
 
 apolloClient.writeData({ data });

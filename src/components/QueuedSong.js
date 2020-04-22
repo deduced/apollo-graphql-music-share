@@ -32,7 +32,11 @@ const useStyles = makeStyles({
 
 function QueuedSong({ song }) {
   const classes = useStyles();
-  const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_FROM_QUEUE);
+  const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_FROM_QUEUE, {
+    onCompleted: data => {
+      localStorage.setItem("queue", JSON.stringify(data.addOrRemoveFromQueue));
+    }
+  });
   const { artist, thumbnail, title } = song;
 
   function handleAddOrRemoveFromQueue() {
