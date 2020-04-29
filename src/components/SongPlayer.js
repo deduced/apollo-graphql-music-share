@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import QueuedSongList from "./QueuedSongList";
 import {
   Card,
@@ -43,7 +43,23 @@ function SongPlayer() {
   const [played, setPlayed] = useState(0);
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
+  const [positionInQueue, setPositionInQueue] = useState(0);
   const classes = useStyles();
+
+  useEffect(() => {
+    const songIndex = data.queuedSongs.findIndex(
+      (song) => song.id === state.song.id
+    );
+    setPositionInQueue(songIndex);
+  }, [data.queuedSongs, state.song.id]);
+
+  useEffect(() => {
+    const nextSong = data.queuedSongs[positionInQueue + 1];
+    if (played === 1 && nextSong) {
+      setPlayed(0);
+      dispatch({ type: "SET_SONG", payload: { song: nextSong } });
+    }
+  }, [data.queuedSongs, played, dispatch, positionInQueue]);
 
   function handleTogglePlay() {
     dispatch(state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" });
