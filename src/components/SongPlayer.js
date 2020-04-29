@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import QueuedSongList from "./QueuedSongList";
 import {
   Card,
@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 function SongPlayer() {
   const { data, loading, error } = useQuery(GET_QUEUED_SONGS);
   const { state, dispatch } = useContext(SongContext);
+  const [played, setPlayed] = useState(0);
   const classes = useStyles();
 
   function handleTogglePlay() {
@@ -79,9 +80,16 @@ function SongPlayer() {
               00:01:59
             </Typography>
           </div>
-          <Slider type="range" min={0} max={1} step={0.01} />
+          <Slider value={played} type="range" min={0} max={1} step={0.01} />
         </div>
-        <ReactPlayer url={state.song.url} playing={state.isPlaying} hidden />
+        <ReactPlayer
+          url={state.song.url}
+          playing={state.isPlaying}
+          hidden
+          onProgress={({ played, playedSeconds }) => {
+            setPlayed(played);
+          }}
+        />
         <CardMedia image={state.song.thumbnail} className={classes.thumbnail} />
       </Card>
       <QueuedSongList queue={data.queuedSongs} />
