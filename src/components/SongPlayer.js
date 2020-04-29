@@ -55,7 +55,7 @@ function SongPlayer() {
 
   useEffect(() => {
     const nextSong = data.queuedSongs[positionInQueue + 1];
-    if (played === 1 && nextSong) {
+    if (played >= 0.99 && nextSong) {
       setPlayed(0);
       dispatch({ type: "SET_SONG", payload: { song: nextSong } });
     }
@@ -78,6 +78,14 @@ function SongPlayer() {
     return new Date(seconds * 1000).toISOString().substr(11, 8);
   }
 
+  function handleSkipSong(isNext) {
+    const idx = isNext ? positionInQueue + 1 : positionInQueue - 1;
+    const song = data.queuedSongs[idx];
+    if (song) {
+      dispatch({ type: "SET_SONG", payload: { song: song } });
+    }
+  }
+
   if (error) console.error("there was an issue with GET_QUEUED_SONGS");
 
   if (loading) return <div>Loading...</div>;
@@ -95,7 +103,7 @@ function SongPlayer() {
             </Typography>
           </CardContent>
           <div className={classes.controls}>
-            <IconButton>
+            <IconButton onClick={() => handleSkipSong()}>
               <SkipPrevious />
             </IconButton>
             <IconButton onClick={handleTogglePlay}>
@@ -105,7 +113,7 @@ function SongPlayer() {
                 <PlayArrow className={classes.playIcon} />
               )}
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => handleSkipSong(true)}>
               <SkipNext />
             </IconButton>
             <Typography variant="subtitle1" component="p" color="textSecondary">
