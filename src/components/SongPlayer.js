@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import QueuedSongList from "./QueuedSongList";
 import {
   Card,
@@ -38,12 +38,28 @@ const useStyles = makeStyles((theme) => ({
 
 function SongPlayer() {
   const { data, loading, error } = useQuery(GET_QUEUED_SONGS);
+  const reactPlayerRef = useRef();
   const { state, dispatch } = useContext(SongContext);
   const [played, setPlayed] = useState(0);
+  const [playedSeconds, setPlayedSeconds] = useState(0);
+  const [isSeeking, setIsSeeking] = useState(false);
   const classes = useStyles();
 
   function handleTogglePlay() {
     dispatch(state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" });
+  }
+
+  function handleSliderChange(event, newValue) {
+    setPlayed(newValue);
+  }
+
+  function handleSeekMouseUp() {
+    setIsSeeking(false);
+    reactPlayerRef.current.seekTo(played);
+  }
+
+  function formatSongDuration(seconds) {
+    return new Date(seconds * 1000).toISOString().substr(11, 8);
   }
 
   if (error) console.error("there was an issue with GET_QUEUED_SONGS");
@@ -77,17 +93,30 @@ function SongPlayer() {
               <SkipNext />
             </IconButton>
             <Typography variant="subtitle1" component="p" color="textSecondary">
-              00:01:59
+              {formatSongDuration(playedSeconds)}
             </Typography>
           </div>
-          <Slider value={played} type="range" min={0} max={1} step={0.01} />
+          <Slider
+            onMouseDown={() => setIsSeeking(true)}
+            onMouseUp={handleSeekMouseUp}
+            onChange={handleSliderChange}
+            value={played}
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+          />
         </div>
         <ReactPlayer
+          ref={reactPlayerRef}
           url={state.song.url}
           playing={state.isPlaying}
           hidden
           onProgress={({ played, playedSeconds }) => {
-            setPlayed(played);
+            if (!isSeeking) {
+              setPlayed(played);
+              setPlayedSeconds(playedSeconds);
+            }
           }}
         />
         <CardMedia image={state.song.thumbnail} className={classes.thumbnail} />
