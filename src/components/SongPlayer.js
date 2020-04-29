@@ -7,19 +7,20 @@ import {
   IconButton,
   Slider,
   CardMedia,
-  makeStyles
+  makeStyles,
 } from "@material-ui/core";
 import { SkipPrevious, PlayArrow, SkipNext, Pause } from "@material-ui/icons";
 import { SongContext } from "../App";
 import { useQuery } from "@apollo/react-hooks";
 import { GET_QUEUED_SONGS } from "../graphql/queries";
+import ReactPlayer from "react-player";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: { display: "flex", justifyContent: "space-between" },
   details: {
     display: "flex",
     flexDirection: "column",
-    padding: "0px 15px"
+    padding: "0px 15px",
   },
   content: { flex: "1 0 auto" },
   thumbnail: { width: 150 },
@@ -27,12 +28,12 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     alignItems: "center",
     paddingRight: theme.spacing(1),
-    paddingLeft: theme.spacing(1)
+    paddingLeft: theme.spacing(1),
   },
   playIcon: {
     height: 38,
-    width: 38
-  }
+    width: 38,
+  },
 }));
 
 function SongPlayer() {
@@ -80,6 +81,7 @@ function SongPlayer() {
           </div>
           <Slider type="range" min={0} max={1} step={0.01} />
         </div>
+        <ReactPlayer url={state.song.url} playing={state.isPlaying} hidden />
         <CardMedia image={state.song.thumbnail} className={classes.thumbnail} />
       </Card>
       <QueuedSongList queue={data.queuedSongs} />
